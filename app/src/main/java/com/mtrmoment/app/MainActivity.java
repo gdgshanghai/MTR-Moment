@@ -2,6 +2,7 @@ package com.mtrmoment.app;
 
 import java.io.IOException;
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.content.pm.ActivityInfo;
 import android.graphics.PixelFormat;
@@ -20,11 +21,16 @@ public class MainActivity extends Activity implements SurfaceHolder.Callback{
     SurfaceHolder surfaceHolder;
     boolean previewing = false;
     LayoutInflater controlInflater = null;
+    View mDecorView;
 
     /** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mDecorView = getWindow().getDecorView();
+        hideSystemUI();
+        final ActionBar bar = getActionBar();
+        bar.hide();
         setContentView(R.layout.activity_main);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
 
@@ -79,5 +85,18 @@ public class MainActivity extends Activity implements SurfaceHolder.Callback{
         camera.release();
         camera = null;
         previewing = false;
+    }
+
+    private void hideSystemUI() {
+        // Set the IMMERSIVE flag.
+        // Set the content to appear under the system bars so that the content
+        // doesn't resize when the system bars hide and show.
+        mDecorView.setSystemUiVisibility(
+                View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                        | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                        | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                        | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION // hide nav bar
+                        | View.SYSTEM_UI_FLAG_FULLSCREEN // hide status bar
+                        | View.SYSTEM_UI_FLAG_IMMERSIVE);
     }
 }
